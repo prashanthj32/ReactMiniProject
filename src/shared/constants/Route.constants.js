@@ -1,3 +1,5 @@
 export  const RouteConstants = {
-    LOGIN : 'login'
+    LOGIN : 'login',
+    SIGNUP:'signup',
+    FORGOTPASSWORD:'forgotpassword'
 } 
