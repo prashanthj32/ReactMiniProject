@@ -1,3 +1,4 @@
 export  const RouteConstants = {
-    LOGIN : 'login'
+    LOGIN : 'login',
+    SIDENAV : 'sideNav'
 } 
