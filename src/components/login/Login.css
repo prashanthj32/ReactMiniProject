@@ -21,12 +21,19 @@
     margin-bottom: 15px;
   }
 
-  .h2{
-    /* background-color:blueviolet; */
+  .loginbg{
     color: blue;
   }
 
   .bgpage{
     background-color:#a300ff1a;
   }
+
+  .errmessage{
+    color: red;
+  }
+
+  .input-container {
+    margin-bottom: 10px; 
+}
 

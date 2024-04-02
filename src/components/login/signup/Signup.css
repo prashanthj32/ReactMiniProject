@@ -8,15 +8,31 @@
     border: 1px solid #ccc;
     border-radius: 15px;
     background-color:aquamarine;
-    max-width: 600px;
+    max-width: 1000px;
     
   }
 
-  .h2{
-    /* background-color:blueviolet; */
+  .signupbg{
     color: blue;
   }
 
   .bgpage{
     background-color:#a300ff1a;
   }
+
+  .input-container {
+    margin-bottom: 10px; 
+}
+
+.errmessage{
+  color: red;
+}
+
+.form-header {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}

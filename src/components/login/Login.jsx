@@ -1,85 +1,83 @@
-import React, { useState } from "react";
+import React from "react";
 import "./../../components/login/Login.css";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
 const LoginForm = () => {
-  const [inputFields, setInputFields] = useState({
-    email: "",
-    password: "",
-  });
-  const [errors, setErrors] = useState({});
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const handleChange = (e) => {
-    setInputFields({ ...inputFields, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const newErrors = {};
-    if (!inputFields.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(inputFields.email)) {
-      newErrors.email = "Email is invalid";
-    }
-    if (!inputFields.password.trim()) {
-      newErrors.password = "Password is required";
-    }
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-    } else {
-      console.log("Form submitted successfully", inputFields);
-    }
+  const onSubmit = (data) => {
+    console.log(data.email, data.password);
   };
 
   return (
     <div className="bgpage">
-      <h2 className="h2">Login</h2>
-    <div className="login-form">
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <TextField
-            type="email"
-            name="email"
-            value={inputFields.email}
-            onChange={handleChange}
-            error={errors.email ? true : false}
-            helperText={errors.email}
-            label="Email"
-          />
-        </div>
-        <div className="form-group">
-          <TextField
-            type="password"
-            name="password"
-            value={inputFields.password}
-            onChange={handleChange}
-            error={errors.password ? true : false}
-            helperText={errors.password}
-            label="Password"
-          />
-        </div>
-        <Button variant="contained" type="submit">
-          Login
-        </Button>
-        <div>
-          ----------------- OR --------------
+      <h2 className="loginbg">Login</h2>
+      <div className="login-form">
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div>
-            <Button variant="text" component={Link} to="/forgotpassword">
-              Forgot Password?
-            </Button>
+          <div className="input-container">
+            <TextField
+              label="Email"
+              id="email"
+              {...register("email", {
+                required: "required",
+                pattern: {
+                  value: /\S+@\S+\.\S+/,
+                  message: "Entered value does not match email format",
+                },
+              })}
+              type="email"
+            />
+            {errors.email && (
+              <span className="errmessage">{errors.email.message}</span>
+            )}
+          </div>
+          <div className="input-container">
+            <TextField
+              label="Password"
+              id="password"
+              {...register("password", {
+                required: "required",
+                minLength: {
+                  value: 5,
+                  message: "min length is 5",
+                },
+              })}
+              type="password"
+            />
+            {errors.password && (
+              <span className="errmessage">{errors.password.message}</span>
+            )}
+          </div>
           </div>
           <div>
-            Don't have an account?
-            <Button variant="text" component={Link} to="/signup">
-              Sign up
-            </Button>
+          <Button variant="contained" type="submit">
+            Login
+          </Button>
           </div>
-        </div>
-      </form>
-    </div>
+          <div>
+            ----------------- OR --------------
+            <div>
+              <Button variant="text" component={Link} to="/forgotpassword">
+                Forgot Password?
+              </Button>
+            </div>
+            <div>
+              Don't have an account?
+              <Button variant="text" component={Link} to="/signup">
+                Sign up
+              </Button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

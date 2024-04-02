@@ -1,140 +1,128 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm } from "react-hook-form";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { Link } from "react-router-dom";
-import './Signup.css'
+import "./../../login/signup/Signup.css";
 
+function Signup() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm();
 
-const SignupForm = () => {
-  const [inputFields, setInputFields] = useState({
-    name: "",
-    phoneNumber: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-  const [errors, setErrors] = useState({});
+  const password = watch("password", "");
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setInputFields({
-      ...inputFields,
-      [name]: value,
-    });
-
-    setErrors({
-      ...errors,
-      [name]: "",
-    });
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const newErrors = {};
-    if (!inputFields.name.trim()) {
-      newErrors.name = "Name is required";
-    }
-    if (!inputFields.phoneNumber.trim()) {
-      newErrors.phoneNumber = "Phone number is required";
-    } else if (!/^\d{10}$/.test(inputFields.phoneNumber.trim())) {
-      newErrors.phoneNumber = "Phone number must be 10 digits";
-    }
-    if (!inputFields.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(inputFields.email)) {
-      newErrors.email = "Email is invalid";
-    }
-    if (!inputFields.password.trim()) {
-      newErrors.password = "Password is required";
-    } else if (inputFields.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters";
-    }
-    if (!inputFields.confirmPassword.trim()) {
-      newErrors.confirmPassword = "Confirm password is required";
-    } else if (inputFields.confirmPassword !== inputFields.password) {
-      newErrors.confirmPassword = "Passwords do not match";
-    }
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-    } else {
-      console.log("Form submitted successfully");
-    }
+  const onSubmit = (data) => {
+    console.log(data);
   };
 
   return (
     <div className="bgpage">
-        <h2 className="h2">Sign up</h2>
-    <div className="signup-form">
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <TextField
-            type="text"
-            name="name"
-            value={inputFields.name}
-            onChange={handleChange}
-            error={errors.name ? true : false}
-            helperText={errors.name}
-            label="Name"
-          />
-        </div>
-        <div className="form-group">
-          <TextField
-            type="text"
-            name="phoneNumber"
-            value={inputFields.phoneNumber}
-            onChange={handleChange}
-            error={errors.phoneNumber ? true : false}
-            helperText={errors.phoneNumber}
-            label="Phone Number"
-          />
-        </div>
-        <div className="form-group">
-          <TextField
-            type="email"
-            name="email"
-            value={inputFields.email}
-            onChange={handleChange}
-            error={errors.email ? true : false}
-            helperText={errors.email}
-            label="Email"
-          />
-        </div>
-        <div className="form-group">
-          <TextField
-            type="password"
-            name="password"
-            value={inputFields.password}
-            onChange={handleChange}
-            error={errors.password ? true : false}
-            helperText={errors.password}
-            label="Password"
-          />
-        </div>
-        <div className="form-group">
-          <TextField
-            type="password"
-            name="confirmPassword"
-            value={inputFields.confirmPassword}
-            onChange={handleChange}
-            error={errors.confirmPassword ? true : false}
-            helperText={errors.confirmPassword}
-            label="Confirm Password"
-          />
-        </div>
-        <Button variant="contained" type="submit">
-          Sign Up
-        </Button>
-        <div>
-          Already have an account?
-          <Button variant="text" component={Link} to="/login">
-            Login
+      <h2 className="signupbg">Sign up</h2>
+      <div className="signup-form">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="form-group">
+            <div className="input-container">
+              <TextField
+                label="Name"
+                id="name"
+                {...register("name", {
+                  required: "required",
+                  pattern: {
+                    message: "Name is required",
+                  },
+                })}
+                type="text"
+              />
+              {errors.name && (
+                <span className="errmessage">{errors.name.message}</span>
+              )}
+            </div>
+            <div className="input-container">
+              <TextField
+                label="Email"
+                id="email"
+                {...register("email", {
+                  required: "required",
+                  pattern: {
+                    value: /\S+@\S+\.\S+/,
+                    message: "Entered value does not match email format",
+                  },
+                })}
+                type="email"
+              />
+              {errors.email && (
+                <span className="errmessage">{errors.email.message}</span>
+              )}
+            </div>
+            <div className="input-container">
+              <TextField
+                label="Phone Number"
+                id="phonenumber"
+                {...register("phonenumber", {
+                  required: "required",
+                  pattern: {
+                    value: "[0-9]{10}",
+                    message: "Number not valid",
+                  },
+                })}
+                type="number"
+              />
+              {errors.phonenumber && (
+                <span className="errmessage">{errors.phonenumber.message}</span>
+              )}
+            </div>
+            <div className="input-container">
+              <TextField
+                label="Password"
+                id="password"
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 5,
+                    message: "Password must be at least 5 characters",
+                  },
+                })}
+                type="password"
+              />
+              {errors.password && (
+                <span className="errmessage">{errors.password.message}</span>
+              )}
+            </div>
+            <div className="input-container">
+              <TextField
+                label="Confirm Password"
+                id="confirmpassword"
+                {...register("confirmpassword", {
+                  required: "Please confirm your password",
+                  validate: (value) =>
+                    value === password || "The passwords do not match",
+                })}
+                type="password"
+              />
+              {errors.confirmpassword && (
+                <span className="errmessage">
+                  {errors.confirmpassword.message}
+                </span>
+              )}
+            </div>
+          </div>
+          <Button variant="contained" type="submit">
+            Sign Up
           </Button>
-        </div>
-      </form>
-    </div>
+          <div>
+            Already have an account?
+            <Button variant="text" component={Link} to="/login">
+              Login
+            </Button>
+          </div>
+        </form>
+      </div>
     </div>
   );
-};
+}
 
-export default SignupForm;
+export default Signup;
