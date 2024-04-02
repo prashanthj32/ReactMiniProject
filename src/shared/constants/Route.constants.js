@@ -1,3 +1,5 @@
 export  const RouteConstants = {
-    LOGIN : 'login'
+    LOGIN : 'login',
+    PRODUCTLIST : '/product',
+    PRODUCTDETAILS : '/product/:id'
 } 
